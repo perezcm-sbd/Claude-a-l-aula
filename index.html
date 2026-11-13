@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude a l’aula: guia pràctica</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#f4f7f6;--card:#fff;--ink:#17302b;--muted:#55706a;--line:#d5e0dc;--board:#1d4a41;--chalk:#f3f7f4;--hi:#f2c94c;--accent:#1d6b58;--soft:#e3efeb;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a18;--card:#172623;--ink:#e6efec;--muted:#9bb4ad;--line:#294039;--board:#123a32;--chalk:#eef5f2;--hi:#f2c94c;--accent:#6fd0b6;--soft:#1d332e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1a18;--card:#172623;--ink:#e6efec;--muted:#9bb4ad;--line:#294039;--board:#123a32;--chalk:#eef5f2;--hi:#f2c94c;--accent:#6fd0b6;--soft:#1d332e;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 "Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 40px}
+.hero{background:var(--board);color:var(--chalk);margin:0 -16px 20px;padding:36px 20px 28px;border-radius:0 0 28px 28px}
+.hero h1{font-size:clamp(30px,8vw,46px);font-weight:800;max-width:14em}
+.hero p{margin:12px 0 0;max-width:32em;opacity:.9}
+.hero .line{display:inline-block;height:6px;width:84px;background:var(--hi);border-radius:3px;margin-top:18px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 15px "Source Sans 3",system-ui,sans-serif;padding:10px 16px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.tab:focus-visible,.copy:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+section[hidden]{display:none}
+h2{font-size:26px;margin:10px 0 6px}
+.lead{color:var(--muted);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin:0 0 14px}
+.card h3{font-size:19px;margin-bottom:8px}
+.card ul{margin:0;padding-left:20px}.card li{margin:4px 0}
+.prompt{background:var(--soft);border-left:5px solid var(--hi);border-radius:4px 14px 14px 4px;padding:14px 16px;margin:0 0 14px}
+.prompt p{margin:0 0 10px;font-size:16px}
+.copy{border:0;background:var(--accent);color:var(--bg);font:600 14px "Source Sans 3",system-ui,sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:0 0 14px}
+.grid .card{margin:0}
+.grid .card:nth-child(odd){border-radius:18px 18px 18px 4px}
+.grid .card:nth-child(even){border-radius:18px 4px 18px 18px}
+.tip{background:var(--board);color:var(--chalk);border-radius:18px;padding:16px 18px;margin:0 0 14px}
+.tip strong{color:var(--hi)}
+.lvl{display:flex;gap:14px;align-items:flex-start}
+.lvl .n{flex:0 0 38px;height:38px;border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center;font:800 18px "Bricolage Grotesque",sans-serif}
+.lvl p{margin:0}
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:0 0 10px;padding:0 16px}
+summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:14px 0;font-weight:600}
+summary::-webkit-details-marker{display:none}
+summary input{width:22px;height:22px;accent-color:var(--accent);flex:0 0 auto}
+summary span{flex:1}
+summary::after{content:"＋";color:var(--accent);font-weight:600}
+details[open] summary::after{content:"－"}
+details .body{padding:0 0 14px 34px;color:var(--ink)}
+details .body ul{margin:6px 0;padding-left:18px}
+.bar{height:10px;border-radius:5px;background:var(--soft);overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--hi);transition:width .3s}
+.small{color:var(--muted);font-size:15px;margin:0 0 16px}
+.warn{border:2px dashed var(--hi);border-radius:18px;padding:14px 18px;margin-top:8px}
+.warn strong{display:block;margin-bottom:4px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 16px}
+.fields label{display:block;font-weight:600;font-size:15px}
+.fields input{width:100%;margin-top:4px;padding:10px 12px;font:inherit;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+.prompt .v{font-weight:600;background:var(--hi);color:#17302b;border-radius:4px;padding:0 4px}
+.prompt h3{font-size:16px;margin:0 0 6px}
+@media (max-width:480px){.fields{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<h1>Claude a l’aula: guia pràctica per al centre</h1>
+<p>Programar, crear material i automatitzar tasques. Tria una pestanya i copia els exemples.</p>
+<span class="line"></span>
+</header>
+ 
+<div class="tabs" role="tablist" aria-label="Seccions">
+<button class="tab" role="tab" id="t0" aria-selected="true" aria-controls="p0">Programació</button>
+<button class="tab" role="tab" id="t1" aria-selected="false" aria-controls="p1">Material</button>
+<button class="tab" role="tab" id="t2" aria-selected="false" aria-controls="p2">Automatització</button>
+<button class="tab" role="tab" id="t3" aria-selected="false" aria-controls="p3">Guia del Projecte</button>
+<button class="tab" role="tab" id="t4" aria-selected="false" aria-controls="p4">Prompts a mida</button>
+</div>
+ 
+<section id="p0" role="tabpanel" aria-labelledby="t0">
+<h2>Programació d’aula</h2>
+<p class="lead">Com més context em donis, millor serà la programació.</p>
+<div class="card"><h3>Què m’has de dir</h3>
+<ul><li>Etapa, curs, matèria i nombre de sessions</li><li>Currículum de referència (LOMLOE i decret de Catalunya) i competències específiques</li><li>Com és el grup: diversitat, NEE, nivell d’entrada</li></ul></div>
+<div class="prompt"><p>«Programa una situació d’aprenentatge de 8 sessions per a 2n d’ESO de Ciències, vinculada als criteris d’avaluació del currículum de Catalunya. Inclou competències, sabers, activitats per sessió i mesures d’atenció a la diversitat.»</p><button class="copy">Copia l’exemple</button></div>
+<div class="card"><h3>Pots demanar-me també</h3>
+<ul><li>Presentar-la en taula</li><li>Adaptar-la a un grup concret</li><li>Fer-la coherent amb el PEC (si em passes fragments)</li></ul></div>
+</section>
+ 
+<section id="p1" role="tabpanel" aria-labelledby="t1" hidden>
+<h2>Material d’aula</h2>
+<p class="lead">Del temari a la rúbrica, amb el format que ja fas servir.</p>
+<div class="grid">
+<div class="card"><h3>Temari i apunts</h3><p>Adaptats a un nivell lector concret.</p></div>
+<div class="card"><h3>Activitats</h3><p>Amb diferents graus de dificultat i solucionari.</p></div>
+<div class="card"><h3>Proves</h3><p>Tipus test, resposta oberta i problemes.</p></div>
+<div class="card"><h3>Rúbriques</h3><p>Nivells d’assoliment amb descriptors.</p></div>
+<div class="card"><h3>Adaptacions</h3><p>Reforç, ampliació i suport a NEE.</p></div>
+</div>
+<div class="tip"><strong>Truc:</strong> enganxa’m un exemple del teu material o rúbrica i digue’m «mantén aquest format i to». Després, itera: «més curt», «afegeix un exemple quotidià».</div>
+<div class="prompt"><p>«Crea una rúbrica de 4 nivells per avaluar un treball cooperatiu de Ciències a 2n d’ESO, amb cinc criteris i descriptors clars.»</p><button class="copy">Copia l’exemple</button></div>
+<p class="small">Pots demanar el resultat directament en Word, Excel (per a notes) o presentació.</p>
+</section>
+ 
+<section id="p2" role="tabpanel" aria-labelledby="t2" hidden>
+<h2>Automatitzar operacions</h2>
+<p class="lead">Tres nivells, de més senzill a més avançat.</p>
+<div class="card lvl"><div class="n">1</div><div><h3>Projectes</h3><p>Hi guardes les instruccions fixes (currículum, plantilles, to del centre) i cada conversa parteix d’aquest context.</p></div></div>
+<div class="card lvl"><div class="n">2</div><div><h3>Connectors</h3><p>Amb Google Drive, Docs, Sheets, Gmail o Calendar activats, puc llegir, redactar i organitzar documents, correus (com els comunicats a famílies) i calendari.</p></div></div>
+<div class="card lvl"><div class="n">3</div><div><h3>Eines a mida</h3><p>Una pàgina o calculadora (per exemple, de notes ponderades), un script o, per a integracions grans, l’API connectada als sistemes del centre.</p></div></div>
+</section>
+ 
+<section id="p3" role="tabpanel" aria-labelledby="t3" hidden>
+<h2>Guia: programar amb un Projecte</h2>
+<p class="lead">Marca cada pas quan el tinguis fet.</p>
+<div class="bar" aria-hidden="true"><i id="fill"></i></div>
+<p class="small" id="count" aria-live="polite">0 de 6 passos fets</p>
+ 
+<details><summary><input type="checkbox" aria-label="Pas 1 fet"><span>Crea el Projecte</span></summary><div class="body">Un per matèria i curs (per exemple, «Ciències 2n ESO») o un per departament. Millor que siguin específics.</div></details>
+<details><summary><input type="checkbox" aria-label="Pas 2 fet"><span>Escriu les instruccions</span></summary><div class="body"><ul><li>El teu rol i context («Sóc docent de Ciències a 2n d’ESO a Catalunya»)</li><li>El marc normatiu (LOMLOE, decret de Catalunya)</li><li>L’estructura: competències, sabers, criteris, sessions, activitats, avaluació, diversitat</li><li>To i format: taula, llenguatge clar, en català</li></ul></div></details>
+<details><summary><input type="checkbox" aria-label="Pas 3 fet"><span>Carrega els documents de referència</span></summary><div class="body"><ul><li>Currículum oficial de la matèria</li><li>Fragments del PEC, la PGA i les normes d’avaluació</li><li>Una programació anterior que valoris com a model</li><li>Les teves plantilles i rúbriques</li></ul></div></details>
+<details><summary><input type="checkbox" aria-label="Pas 4 fet"><span>Treballa per capes</span></summary><div class="body"><ul><li>«Fes l’esquema anual en unitats i trimestres.»</li><li>«Desenvolupa la situació d’aprenentatge 1 amb totes les sessions.»</li><li>«Genera les activitats d’avaluació i la rúbrica d’aquesta unitat.»</li><li>«Adapta-ho per a un alumne amb NEE i afegeix reforç i ampliació.»</li></ul></div></details>
+<details><summary><input type="checkbox" aria-label="Pas 5 fet"><span>Revisa i afina</span></summary><div class="body">Comprova que els criteris coincideixen amb el currículum. Demana canvis concrets («redueix a 6 sessions», «afegeix treball cooperatiu») i guarda al Projecte les respostes que et convencin com a model.</div></details>
+<details><summary><input type="checkbox" aria-label="Pas 6 fet"><span>Reutilitza i mantén</span></summary><div class="body">Cada any, actualitza els documents i duplica el Projecte per al curs següent. Pots demanar l’exportació en Word o Excel.</div></details>
+ 
+<div class="warn"><strong>Abans de començar</strong>No hi pugis dades personals de l’alumnat (noms, informes psicopedagògics) sense l’autorització del centre, i revisa sempre el resultat abans d’usar-lo.</div>
+</section>
+ 
+<section id="p4" role="tabpanel" aria-labelledby="t4" hidden>
+<h2>Prompts a mida</h2>
+<p class="lead">Escriu el curs i la matèria i tots els exemples s’adapten sols. Després, copia el que et serveixi.</p>
+<div class="fields">
+<label for="curs">Curs<input id="curs" list="cursos" placeholder="Per exemple, 2n d’ESO" autocomplete="off"></label>
+<label for="mat">Matèria<input id="mat" list="mats" placeholder="Per exemple, Ciències" autocomplete="off"></label>
+</div>
+<datalist id="cursos"><option value="3r de Primària"><option value="6è de Primària"><option value="1r d’ESO"><option value="2n d’ESO"><option value="3r d’ESO"><option value="4t d’ESO"><option value="1r de Batxillerat"><option value="2n de Batxillerat"></datalist>
+<datalist id="mats"><option value="Llengua catalana"><option value="Llengua castellana"><option value="Matemàtiques"><option value="Ciències de la naturalesa"><option value="Física i Química"><option value="Biologia i Geologia"><option value="Ciències socials"><option value="Anglès"><option value="Tecnologia"><option value="Educació física"><option value="Música"></datalist>
+ 
+<div class="prompt"><h3>Programació anual</h3><p>«Fes l’esquema anual de <span class="v vm">[matèria]</span> per a <span class="v vc">[curs]</span> a Catalunya, en unitats i trimestres, amb les competències específiques i els criteris d’avaluació del currículum.»</p><button class="copy">Copia</button></div>
+<div class="prompt"><h3>Situació d’aprenentatge</h3><p>«Dissenya una situació d’aprenentatge de <span class="v vm">[matèria]</span> per a <span class="v vc">[curs]</span>: context, producte final, 8 sessions, activitats, avaluació i atenció a la diversitat.»</p><button class="copy">Copia</button></div>
+<div class="prompt"><h3>Activitats en tres nivells</h3><p>«Crea 10 activitats de <span class="v vm">[matèria]</span> per a <span class="v vc">[curs]</span> en tres nivells de dificultat (reforç, base i ampliació), amb solucionari.»</p><button class="copy">Copia</button></div>
+<div class="prompt"><h3>Prova escrita</h3><p>«Elabora una prova de <span class="v vm">[matèria]</span> per a <span class="v vc">[curs]</span> de 45 minuts, amb preguntes tipus test, resposta curta i un problema, i els criteris de correcció.»</p><button class="copy">Copia</button></div>
+<div class="prompt"><h3>Rúbrica</h3><p>«Fes una rúbrica de 4 nivells per avaluar un treball de <span class="v vm">[matèria]</span> a <span class="v vc">[curs]</span>, amb cinc criteris i descriptors clars.»</p><button class="copy">Copia</button></div>
+<div class="prompt"><h3>Adaptació per a NEE</h3><p>«Adapta l’activitat següent de <span class="v vm">[matèria]</span> per a <span class="v vc">[curs]</span> per a un alumne amb dificultats de lectura, mantenint els mateixos objectius: [enganxa aquí l’activitat].»</p><button class="copy">Copia</button></div>
+<div class="prompt"><h3>Comunicat a les famílies</h3><p>«Redacta un comunicat per a les famílies de <span class="v vc">[curs]</span> sobre el projecte de <span class="v vm">[matèria]</span> d’aquest trimestre, en un to proper i clar.»</p><button class="copy">Copia</button></div>
+<p class="small">Si tens un Projecte creat, no cal que hi repeteixis el currículum: n’hi ha prou amb la petició.</p>
+</section>
+</div>
+ 
+<script>
+(function(){
+var tabs=document.querySelectorAll('.tab'),panels=document.querySelectorAll('section[role=tabpanel]');
+function show(i){tabs.forEach(function(t,k){t.setAttribute('aria-selected',k===i?'true':'false');panels[k].hidden=k!==i;});}
+tabs.forEach(function(t,k){t.addEventListener('click',function(){show(k);});});
+ 
+document.querySelectorAll('.copy').forEach(function(b){
+b.addEventListener('click',function(){
+var txt=b.previousElementSibling.textContent;
+function done(){var o=b.textContent;b.textContent='Copiat';setTimeout(function(){b.textContent=o;},1500);}
+function fallback(){try{var a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a);done();}catch(e){b.textContent='Selecciona el text';}}
+try{navigator.clipboard.writeText(txt).then(done,fallback);}catch(e){fallback();}
+});});
+ 
+function fill(id,cls){var el=document.getElementById(id);function u(){document.querySelectorAll(cls).forEach(function(s){s.textContent=el.value.trim()||s.getAttribute('data-d');});}
+document.querySelectorAll(cls).forEach(function(s){s.setAttribute('data-d',s.textContent);});el.addEventListener('input',u);}
+fill('curs','.vc');fill('mat','.vm');
+ 
+var boxes=document.querySelectorAll('summary input');
+boxes.forEach(function(c){
+c.addEventListener('click',function(e){e.stopPropagation();update();});
+});
+function update(){
+var n=0;boxes.forEach(function(c){if(c.checked)n++;});
+document.getElementById('fill').style.width=(n/boxes.length*100)+'%';
+document.getElementById('count').textContent=n+' de '+boxes.length+' passos fets';
+}
+})();
+</script>
+</body>
+</html>
